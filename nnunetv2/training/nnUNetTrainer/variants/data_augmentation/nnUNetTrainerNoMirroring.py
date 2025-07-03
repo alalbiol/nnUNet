@@ -59,17 +59,21 @@ class nnUNetTrainer_onlyMirror01_1500ep(nnUNetTrainer_onlyMirror01):
     def __init__(self, plans: dict, configuration: str, fold: int, dataset_json: dict,
                  device: torch.device = torch.device('cuda')):
         super().__init__(plans, configuration, fold, dataset_json, device)
+        self.print_to_log_file("\n#######################################################################\n"
+                "Using custom trainer with the winning setting of 2024\n"
+                "#######################################################################\n",
+                also_print_to_console=True, add_timestamp=False)
         self.num_epochs = 1500
 
 class nnUNetTrainer_MirrorLR1_1500ep(nnUNetTrainer):
     def __init__(self, plans: dict, configuration: str, fold: int, dataset_json: dict,
                  device: torch.device = torch.device('cuda')):
+        super().__init__(plans, configuration, fold, dataset_json, device)
         self.print_to_log_file("\n#######################################################################\n"
                         "Using custom trainer that relabels segmentation for LR flips \n"
                         "#######################################################################\n",
                         also_print_to_console=True, add_timestamp=False)
         
-        super().__init__(plans, configuration, fold, dataset_json, device)
         self.num_epochs = 1500
         
         
@@ -225,10 +229,15 @@ class nnUNetTrainer_MirrorLR1_1500ep(nnUNetTrainer):
         return ComposeTransforms(transforms)
     
     
-class nnUNetTrainer_MirrorLR1_1500ep(nnUNetTrainer):
+class nnUNetTrainer_MirrorLR2_1500ep(nnUNetTrainer):
     def __init__(self, plans: dict, configuration: str, fold: int, dataset_json: dict,
                  device: torch.device = torch.device('cuda')):
         super().__init__(plans, configuration, fold, dataset_json, device)
+        self.print_to_log_file("\n#######################################################################\n"
+                "Using custom trainer that relabels segmentation if number of flips is odd \n"
+                "#######################################################################\n",
+        )
+
         self.num_epochs = 1500
     @staticmethod
     def get_training_transforms(
